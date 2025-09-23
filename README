@@ -1,129 +1,129 @@
 
-> **Plateforme de gestion d’influenceurs — Backend Express + Prisma + MongoDB / Frontend React + Vite + Material UI**
+> Plateforme de gestion d’influenceurs — Backend Express + Prisma + MongoDB / Frontend React + Vite + Material UI
 
----
 
-##  Aperçu
+
+  Aperçu
 
 InfluenceHub est une application web full-stack permettant de :
 
--  **S’authentifier** (inscription / connexion / JWT)
--  **Créer, Lire, Mettre à jour, Supprimer** des profils d’influenceurs
--  **Filtrer** par pays, catégorie
--  Interface **moderne, responsive, et intuitive**
+-  S’authentifier (inscription / connexion / JWT)
+-  Créer, Lire, Mettre à jour, Supprimer des profils d’influenceurs
+-  Filtrer par pays, catégorie
+-  Interface moderne, responsive, et intuitive
 
----
 
-##  Stack Technique
+
+  Stack Technique
 
 | Partie | Technologies |
-|--------|--------------|
-| **Backend** | Node.js, Express.js, Prisma ORM, MongoDB, JWT |
-| **Frontend** | React (Vite), Material UI v5, React Router, Axios, Notistack |
-| **Infrastructure** | Docker (MongoDB), .env, NPM/Yarn |
-| **Déploiement** | Local (pour le MVP) |
+|--|--|
+| Backend | Node.js, Express.js, Prisma ORM, MongoDB, JWT |
+| Frontend | React (Vite), Material UI v5, React Router, Axios, Notistack |
+| Infrastructure | Docker (MongoDB), .env, NPM/Yarn |
+| Déploiement | Local (pour le MVP) |
 
----
 
-##  Prérequis
+
+  Prérequis
 
 -  Node.js v18+
 -  Docker & Docker Compose
 -  npm ou yarn
 -  Un terminal (bash, zsh, PowerShell, etc.)
 
----
 
-#  Installation & Lancement
 
----
+  Installation & Lancement
 
-## 1. Cloner le dépôt
 
-```bash
+
+ 1. Cloner le dépôt
+
+bash
 git clone https://github.com/tonusername/influencehub.git
 cd influencehub
-```
 
----
 
-## 2. Lancer la base de données MongoDB avec Docker
+
+
+ 2. Lancer la base de données MongoDB avec Docker
 
 >  À la racine du projet
 
-```bash
+bash
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
-```
+
 
  MongoDB sera accessible sur `mongodb://localhost:27017`
 
----
 
-## 3. Configurer le Backend
+
+ 3. Configurer le Backend
 
 >  `backend/`
 
-### a. Installer les dépendances
+ a. Installer les dépendances
 
-```bash
+bash
 cd backend
 npm install
-```
 
-### b. Créer un fichier `.env` à la racine de `backend/`
 
-```env
+ b. Créer un fichier `.env` à la racine de `backend/`
+
+env
 DATABASE_URL="mongodb://localhost:27017/influenceHub"
 PORT=5000
-JWT_SECRET="votre_secret_jwt_ici" # Ex: "supersecret123"
-```
+JWT_SECRET="votre_secret_jwt_ici"  Ex: "supersecret123"
 
-### c. Générer le client Prisma
 
-```bash
+ c. Générer le client Prisma
+
+bash
 npx prisma generate
-```
 
-### d. Lancer le serveur backend
 
-```bash
+ d. Lancer le serveur backend
+
+bash
 npm run dev
-```
+
 
 → Serveur disponible sur `http://localhost:5000`
 
----
 
-## 4. Lancer le Frontend
+
+ 4. Lancer le Frontend
 
 >  `frontend/`
 
-### a. Installer les dépendances
+ a. Installer les dépendances
 
-```bash
+bash
 cd ../frontend
 npm install
-```
 
-### b. Lancer le serveur de développement
 
-```bash
+ b. Lancer le serveur de développement
+
+bash
 npm run dev
-```
+
 
 → Frontend disponible sur `http://localhost:5173`
 
----
 
-#  Tester le Backend avec cURL
+
+  Tester le Backend avec cURL
 
 > Toutes les commandes ci-dessous peuvent être exécutées dans ton terminal.
 
----
 
-##  1. Inscription
 
-```bash
+  1. Inscription
+
+bash
 curl -X POST http://localhost:5000/api/auth/inscription \
   -H "Content-Type: application/json" \
   -d '{
@@ -131,52 +131,52 @@ curl -X POST http://localhost:5000/api/auth/inscription \
     "motDePasse": "password123",
     "nom": "Test User"
   }'
-```
+
 
 → Réponse attendue : `Utilisateur créé avec succès` + données utilisateur.
 
----
 
-##  2. Connexion (obtenir le token JWT)
 
-```bash
+  2. Connexion (obtenir le token JWT)
+
+bash
 curl -X POST http://localhost:5000/api/auth/connexion \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "motDePasse": "password123"
   }'
-```
+
 
 → Réponse attendue : `{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx" }`
 
- **Copie ce token, tu en auras besoin pour les requêtes suivantes.**
+ Copie ce token, tu en auras besoin pour les requêtes suivantes.
 
----
 
-##  3. Lister tous les influenceurs (public)
 
-```bash
+  3. Lister tous les influenceurs (public)
+
+bash
 curl -X GET http://localhost:5000/api/influenceurs
-```
+
 
 → Réponse : tableau JSON d’influenceurs.
 
----
 
-##  4. Filtrer les influenceurs
 
-```bash
+  4. Filtrer les influenceurs
+
+bash
 curl -X GET "http://localhost:5000/api/influenceurs?categorie=Humour&pays=Italie"
-```
+
 
 → Réponse : influenceurs correspondant aux critères.
 
----
 
-##  5. Créer un influenceur (protégé — nécessite un token)
 
-```bash
+  5. Créer un influenceur (protégé — nécessite un token)
+
+bash
 curl -X POST http://localhost:5000/api/influenceurs \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
@@ -187,66 +187,66 @@ curl -X POST http://localhost:5000/api/influenceurs \
     "pays": "Canada",
     "categorie": "Gaming"
   }'
-```
+
 
 → Réponse : objet influenceur créé.
 
----
 
-## ✏️ 6. Mettre à jour un influenceur
 
-```bash
+  6. Mettre à jour un influenceur
+
+bash
 curl -X PUT http://localhost:5000/api/influenceurs/ID_DE_L_INFLUENCEUR \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
   -d '{"followers": 60000}'
-```
+
 
 → Remplace `ID_DE_L_INFLUENCEUR` par un vrai ID (ex: `68d1d02fdb2dcad20a0c98ac`).
 
----
 
-## 🗑️ 7. Supprimer un influenceur
 
-```bash
+  7. Supprimer un influenceur
+
+bash
 curl -X DELETE http://localhost:5000/api/influenceurs/ID_DE_L_INFLUENCEUR \
   -H "Authorization: Bearer TON_TOKEN_ICI"
-```
+
 
 → Réponse : `{"message":"Influenceur supprimé avec succès"}`
 
----
 
-#  Tester le Frontend
+
+  Tester le Frontend
 
 1. Ouvre ton navigateur → `http://localhost:5173`
-2. Clique sur **“Commencer gratuitement”** → inscris-toi.
+2. Clique sur “Commencer gratuitement” → inscris-toi.
 3. Connecte-toi.
 4. Explore la liste des influenceurs.
 5. Crée, modifie, ou supprime un influenceur via l’interface.
 
----
 
-#  Nettoyage & Réinitialisation
 
-## Supprimer le conteneur MongoDB
+  Nettoyage & Réinitialisation
 
-```bash
+ Supprimer le conteneur MongoDB
+
+bash
 docker stop mongodb_influencehub
 docker rm mongodb_influencehub
-```
 
-## Réinitialiser la base de données
+
+ Réinitialiser la base de données
 
 1. Supprime le conteneur (voir ci-dessus).
 2. Relance-le → une base vide sera créée.
 3. (Optionnel) Utilise `mongosh` pour supprimer des documents spécifiques.
 
----
 
-#  Structure du Projet
 
-```
+  Structure du Projet
+
+
 influencehub/
 ├── backend/
 │   ├── src/
@@ -275,11 +275,11 @@ influencehub/
 │   │   └── main.jsx
 │   └── package.json
 └── README.md
-```
 
----
 
-#  Fonctionnalités MVP
+
+
+  Fonctionnalités MVP
 
 -  Authentification JWT (inscription, connexion, déconnexion)
 -  CRUD complet des influenceurs
@@ -288,9 +288,9 @@ influencehub/
 -  Gestion des erreurs (tokens expirés, champs manquants)
 -  Dockerisé (MongoDB)
 
----
 
-#  Évolutions Futures
+
+  Évolutions Futures
 
 -  Tableau de bord analytics (graphiques, stats)
 -  Export CSV/PDF
@@ -298,7 +298,7 @@ influencehub/
 -  Gestion des rôles (admin / lecteur)
 -  Internationalisation (i18n)
 
----
+
 
 
 
