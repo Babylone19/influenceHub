@@ -1,27 +1,33 @@
-InfluenceHub - Plateforme de gestion d'influenceurs
+```markdown
+# InfluenceHub - Plateforme de gestion d'influenceurs
+
 Application web full-stack pour gérer des profils d'influenceurs avec authentification sécurisée, opérations CRUD et filtrage dynamique.
-Technologies utilisées :
 
-Backend : Express, Prisma, MongoDB
-Frontend : React, Vite, Material UI
-Outils : Docker, JWT pour authentification
+## Technologies utilisées
 
-Description
+**Backend:** Express, Prisma, MongoDB  
+**Frontend:** React, Vite, Material UI  
+**Outils:** Docker, JWT pour authentification
+
+## Description
+
 InfluenceHub permet de gérer une base d'influenceurs avec les fonctionnalités suivantes :
 
-Authentification sécurisée : Inscription et connexion avec JWT.
-Gestion des influenceurs : Création, lecture, mise à jour et suppression (CRUD).
-Filtrage dynamique : Recherche par pays et catégorie.
-Interface utilisateur : Design moderne, responsive avec Material UI (inclut le mode sombre).
+- Authentification sécurisée : Inscription et connexion avec JWT
+- Gestion des influenceurs : Création, lecture, mise à jour et suppression (CRUD)
+- Filtrage dynamique : Recherche par pays et catégorie
+- Interface utilisateur : Design moderne, responsive avec Material UI (inclut le mode sombre)
 
-Prérequis
+## Prérequis
 
-Node.js (v18 ou supérieur)
-Docker et Docker Compose
-npm ou yarn
-Terminal (bash, zsh, PowerShell, etc.)
+- Node.js (v18 ou supérieur)
+- Docker et Docker Compose
+- npm ou yarn
+- Terminal (bash, zsh, PowerShell, etc.)
 
-Démarrage rapide
+## Démarrage rapide
+
+```bash
 # 1. Cloner le projet
 git clone https://github.com/tonusername/influencehub.git
 cd influencehub
@@ -41,8 +47,11 @@ cd ../frontend
 npm install
 npm run dev
 # Frontend disponible sur http://localhost:5173
+```
 
-Architecture
+## Architecture
+
+```
 influencehub/
 ├── backend/                    # Serveur Express
 │   ├── src/                   # Code source backend
@@ -71,43 +80,52 @@ influencehub/
 │   │   └── main.jsx           # Point d'entrée React
 │   └── package.json           # Dépendances frontend
 └── README.md
+```
 
-Fonctionnalités
-Authentification
+## Fonctionnalités
 
-Inscription avec email, mot de passe et nom.
-Connexion avec génération de token JWT.
-Gestion des sessions et déconnexion.
+### Authentification
+- Inscription avec email, mot de passe et nom
+- Connexion avec génération de token JWT
+- Gestion des sessions et déconnexion
 
-Gestion des influenceurs
+### Gestion des influenceurs
+- Création, lecture, mise à jour et suppression (CRUD)
+- Filtrage par pays et catégorie
+- Accès public ou sécurisé par JWT selon les endpoints
 
-Création, lecture, mise à jour et suppression (CRUD).
-Filtrage par pays et catégorie.
-Accès public ou sécurisé par JWT selon les endpoints.
+### Interface utilisateur
+- Frontend React avec Vite pour des performances optimales
+- Design responsive avec Material UI (inclut le mode sombre)
+- Gestion des erreurs et notifications utilisateur
 
-Interface utilisateur
+## Installation et configuration
 
-Frontend React avec Vite pour des performances optimales.
-Design responsive avec Material UI (inclut le mode sombre).
-Gestion des erreurs et notifications utilisateur.
+### Configuration du backend
 
-Installation et configuration
-Configuration du backend
-Créer un fichier .env dans le dossier backend/ avec le contenu suivant :
+Créer un fichier `.env` dans le dossier `backend/` avec le contenu suivant :
+
+```
 DATABASE_URL="mongodb://localhost:27017/influenceHub"
 PORT=5000
 JWT_SECRET="supersecret123"
+```
 
-Vérification du démarrage
+### Vérification du démarrage
+
 Une fois les services démarrés, vous devriez pouvoir accéder à :
 
-Backend : http://localhost:5000
-Frontend : http://localhost:5173
+- Backend: http://localhost:5000
+- Frontend: http://localhost:5173
 
-Endpoints API
-Tous les endpoints sont accessibles via http://localhost:5000.
-Authentification
-Inscription
+## Endpoints API
+
+Tous les endpoints sont accessibles via `http://localhost:5000`.
+
+### Authentification
+
+#### Inscription
+```
 curl -X POST http://localhost:5000/api/auth/inscription \
   -H "Content-Type: application/json" \
   -d '{
@@ -115,23 +133,32 @@ curl -X POST http://localhost:5000/api/auth/inscription \
     "motDePasse": "password123",
     "nom": "Test User"
   }'
+```
 
-Connexion
+#### Connexion
+```
 curl -X POST http://localhost:5000/api/auth/connexion \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "motDePasse": "password123"
   }'
+```
 
-Influenceurs
-Lister tous les influenceurs
+### Influenceurs
+
+#### Lister tous les influenceurs
+```
 curl -X GET http://localhost:5000/api/influenceurs
+```
 
-Filtrer par pays et catégorie
+#### Filtrer par pays et catégorie
+```
 curl -X GET "http://localhost:5000/api/influenceurs?categorie=Gaming&pays=Canada"
+```
 
-Créer un influenceur
+#### Créer un influenceur
+```
 curl -X POST http://localhost:5000/api/influenceurs \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
@@ -142,67 +169,95 @@ curl -X POST http://localhost:5000/api/influenceurs \
     "pays": "Canada",
     "categorie": "Gaming"
   }'
+```
 
-Mettre à jour un influenceur
+#### Mettre à jour un influenceur
+```
 curl -X PUT http://localhost:5000/api/influenceurs/ID \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
   -d '{"followers": 60000}'
+```
 
-Supprimer un influenceur
+#### Supprimer un influenceur
+```
 curl -X DELETE http://localhost:5000/api/influenceurs/ID \
   -H "Authorization: Bearer TON_TOKEN_ICI"
+```
 
-Fonctionnalités MVP
+## Fonctionnalités MVP
 
-Authentification sécurisée avec JWT.
-Gestion complète des influenceurs (CRUD).
-Filtres dynamiques par pays et catégorie.
-Interface utilisateur moderne avec Material UI (mode sombre inclus).
-Gestion des erreurs (tokens expirés, validation des champs).
-Dockerisation de MongoDB pour un déploiement simplifié.
+- Authentification sécurisée avec JWT
+- Gestion complète des influenceurs (CRUD)
+- Filtres dynamiques par pays et catégorie
+- Interface utilisateur moderne avec Material UI (mode sombre inclus)
+- Gestion des erreurs (tokens expirés, validation des champs)
+- Dockerisation de MongoDB pour un déploiement simplifié
 
-Évolutions futures
+## Évolutions futures
 
-Tableau de bord avec graphiques et statistiques.
-Exportation des données en CSV ou PDF.
-Upload d'avatars via Cloudinary.
-Gestion des rôles (administrateur, lecteur).
-Support de l'internationalisation (i18n).
+- Tableau de bord avec graphiques et statistiques
+- Exportation des données en CSV ou PDF
+- Upload d'avatars via Cloudinary
+- Gestion des rôles (administrateur, lecteur)
+- Support de l'internationalisation (i18n)
 
-Nettoyage et réinitialisation
-Arrêter et supprimer MongoDB
+## Nettoyage et réinitialisation
+
+### Arrêter et supprimer MongoDB
+```
 docker stop mongodb_influencehub
 docker rm mongodb_influencehub
+```
 
-Réinitialiser la base de données
+### Réinitialiser la base de données
+```
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
+```
 
-Dépannage
-Problèmes courants
-Les services ne démarrent pas :
+## Dépannage
+
+### Problèmes courants
+
+**Les services ne démarrent pas :**
+```
 # Vérifier que les ports ne sont pas occupés
 lsof -i :5000 -i :5173
+```
 
-Erreur "Cannot find module" :
+**Erreur "Cannot find module" :**
+```
 # Réinstaller les dépendances
 cd backend && rm -rf node_modules && npm install
 cd ../frontend && rm -rf node_modules && npm install
+```
 
-Base de données corrompue :
+**Base de données corrompue :**
+```
 # Supprimer et relancer le conteneur MongoDB
 docker stop mongodb_influencehub
 docker rm mongodb_influencehub
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
+```
 
-Scripts disponibles
-# Backend
+## Scripts disponibles
+
+### Backend
+```
 cd backend
 npm install       # Installer les dépendances
 npm run dev       # Démarrer en mode développement
 npx prisma generate  # Générer le client Prisma
+```
 
-# Frontend
+### Frontend
+```
 cd frontend
 npm install       # Installer les dépendances
 npm run dev       # Démarrer en mode développement
+```
+
+---
+
+**Développé pour la gestion d'influenceurs digitaux**
+```
