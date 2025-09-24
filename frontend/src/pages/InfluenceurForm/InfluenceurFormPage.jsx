@@ -1,15 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, Paper, Alert } from '@mui/material';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Alert,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  OutlinedInput,
+} from '@mui/material';
+import {
+  PersonAdd as PersonAddIcon,
+  Edit as EditIcon,
+  Save as SaveIcon,
+  Cancel as CancelIcon,
+} from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createInfluenceur, updateInfluenceur, getInfluenceurById } from '../../services/influenceurService';
+import {
+  createInfluenceur,
+  updateInfluenceur,
+  getInfluenceurById,
+} from '../../services/influenceurService';
 import { useSnackbar } from 'notistack';
-import { useAuth } from '../../contexts/AuthContext'; // ← IMPORTÉ
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function InfluenceurFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { logout } = useAuth(); // ← UTILISÉ
+  const { logout } = useAuth();
+
+  // Liste des catégories prédéfinies
+  const [categories, setCategories] = useState([
+    'Humour',
+    'Mode',
+    'Sport',
+    'Divertissement',
+    'Technologie',
+    'Voyage',
+    'Cuisine',
+  ]);
+
+  // État pour gérer la sélection de "Autre"
+  const [showOtherCategory, setShowOtherCategory] = useState(false);
 
   const [formData, setFormData] = useState({
     nom: '',
@@ -35,6 +71,10 @@ export default function InfluenceurFormPage() {
             pays: inf.pays,
             categorie: inf.categorie,
           });
+          // Si la catégorie n'est pas dans la liste, afficher "Autre"
+          if (!categories.includes(inf.categorie)) {
+            setShowOtherCategory(true);
+          }
         })
         .catch(() => {
           setError('Influenceur non trouvé.');
@@ -48,42 +88,49 @@ export default function InfluenceurFormPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+    if (selectedCategory === 'Autre') {
+      setShowOtherCategory(true);
+      setFormData((prev) => ({ ...prev, categorie: '' }));
+    } else {
+      setShowOtherCategory(false);
+      setFormData((prev) => ({ ...prev, categorie: selectedCategory }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     // Validation simple côté client
     if (!formData.nom || !formData.pays || !formData.categorie) {
       setError("Les champs 'nom', 'pays' et 'categorie' sont obligatoires.");
       setLoading(false);
       return;
     }
-
     try {
       const dataToSend = {
         ...formData,
         followers: formData.followers === '' ? null : Number(formData.followers),
       };
-
       if (id) {
         await updateInfluenceur(id, dataToSend);
-        enqueueSnackbar('✅ Influenceur mis à jour !', { variant: 'success' });
+        enqueueSnackbar('Influenceur mis à jour avec succès !', { variant: 'success' });
       } else {
         await createInfluenceur(dataToSend);
-        enqueueSnackbar('✅ Influenceur créé !', { variant: 'success' });
+        enqueueSnackbar('Influenceur créé avec succès !', { variant: 'success' });
       }
       navigate('/influenceurs');
     } catch (err) {
       const errorMessage = err.response?.data?.message;
-
       if (errorMessage === 'Token invalide ou expiré.') {
         enqueueSnackbar('Votre session a expiré. Veuillez vous reconnecter.', { variant: 'warning' });
-        logout(); // ← DÉCONNEXION AUTOMATIQUE
+        logout();
         navigate('/login');
       } else {
-        setError(errorMessage || '❌ Erreur lors de la sauvegarde.');
-        enqueueSnackbar('Erreur', { variant: 'error' });
+        setError(errorMessage || 'Erreur lors de la sauvegarde.');
+        enqueueSnackbar('Erreur lors de la sauvegarde.', { variant: 'error' });
       }
     } finally {
       setLoading(false);
@@ -115,17 +162,31 @@ export default function InfluenceurFormPage() {
           variant="h5"
           component="h1"
           gutterBottom
-          sx={{ fontWeight: 700, textAlign: 'center', color: '#FFFFFF' }}
+          sx={{
+            fontWeight: 700,
+            textAlign: 'center',
+            color: '#FFFFFF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+          }}
         >
-          {id ? '✏️ Modifier un influenceur' : '➕ Créer un influenceur'}
+          {id ? (
+            <>
+              <EditIcon fontSize="small" /> Modifier un influenceur
+            </>
+          ) : (
+            <>
+              <PersonAddIcon fontSize="small" /> Créer un influenceur
+            </>
+          )}
         </Typography>
-
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
           </Alert>
         )}
-
         <form onSubmit={handleSubmit}>
           <TextField
             label="Nom *"
@@ -145,7 +206,6 @@ export default function InfluenceurFormPage() {
               input: { color: '#FFFFFF' },
             }}
           />
-
           <TextField
             label="Réseau (ex: Instagram)"
             name="reseau"
@@ -163,7 +223,6 @@ export default function InfluenceurFormPage() {
               input: { color: '#FFFFFF' },
             }}
           />
-
           <TextField
             label="Followers (nombre)"
             name="followers"
@@ -182,7 +241,6 @@ export default function InfluenceurFormPage() {
               input: { color: '#FFFFFF' },
             }}
           />
-
           <TextField
             label="Pays *"
             name="pays"
@@ -201,26 +259,54 @@ export default function InfluenceurFormPage() {
               input: { color: '#FFFFFF' },
             }}
           />
-
-          <TextField
-            label="Catégorie *"
-            name="categorie"
-            value={formData.categorie}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-            InputLabelProps={{ sx: { color: '#B0B0D0' } }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: '#2A2A4E' },
-                '&:hover fieldset': { borderColor: '#6A35FF' },
-                '&.Mui-focused fieldset': { borderColor: '#6A35FF' },
-              },
-              input: { color: '#FFFFFF' },
-            }}
-          />
-
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel sx={{ color: '#B0B0D0' }}>Catégorie *</InputLabel>
+            <Select
+              name="categorie"
+              value={showOtherCategory ? 'Autre' : formData.categorie}
+              onChange={handleCategoryChange}
+              input={<OutlinedInput sx={{ color: '#FFFFFF' }} />}
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#2A2A4E',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#6A35FF',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#6A35FF',
+                },
+              }}
+              label="Catégorie *"
+            >
+              {categories.map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+              <MenuItem value="Autre">Autre</MenuItem>
+            </Select>
+          </FormControl>
+          {showOtherCategory && (
+            <TextField
+              label="Spécifiez la catégorie"
+              name="categorie"
+              value={formData.categorie}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              InputLabelProps={{ sx: { color: '#B0B0D0' } }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#2A2A4E' },
+                  '&:hover fieldset': { borderColor: '#6A35FF' },
+                  '&.Mui-focused fieldset': { borderColor: '#6A35FF' },
+                },
+                input: { color: '#FFFFFF' },
+              }}
+            />
+          )}
           <Button
             type="submit"
             variant="contained"
@@ -235,17 +321,18 @@ export default function InfluenceurFormPage() {
               fontWeight: 600,
               textTransform: 'none',
             }}
+            startIcon={loading ? null : <SaveIcon />}
           >
             {loading ? 'Sauvegarde...' : id ? 'Mettre à jour' : 'Créer'}
           </Button>
-
           <Button
             variant="text"
             fullWidth
             onClick={() => navigate('/influenceurs')}
             sx={{ mt: 2, color: '#B0B0D0', textTransform: 'none' }}
+            startIcon={<CancelIcon />}
           >
-            ← Annuler
+            Annuler
           </Button>
         </form>
       </Paper>
