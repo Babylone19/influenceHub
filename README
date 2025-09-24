@@ -1,3 +1,5 @@
+
+```markdown
 # InfluenceHub - Plateforme de gestion d'influenceurs
 
 > Application web full-stack pour gérer des profils d'influenceurs avec authentification sécurisée, opérations CRUD et filtrage dynamique.
@@ -320,3 +322,4 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 *Développé pour la gestion d'influenceurs digitaux*
 
 </div>
+```
