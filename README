@@ -1,51 +1,39 @@
-
-```markdown
-# InfluenceHub - Plateforme de gestion d'influenceurs
+ InfluenceHub - Plateforme de gestion d'influenceurs
 
 > Application web full-stack pour gérer des profils d'influenceurs avec authentification sécurisée, opérations CRUD et filtrage dynamique.
-
-## Description
+ Description
 
 InfluenceHub permet de gérer une base d'influenceurs avec les fonctionnalités suivantes :
 
-- **Authentification sécurisée** : Inscription et connexion avec JWT
-- **Gestion des influenceurs** : Création, lecture, mise à jour et suppression (CRUD)
-- **Filtrage dynamique** : Recherche par pays et catégorie
-- **Interface utilisateur** : Design moderne, responsive avec Material UI (inclut le mode sombre)
-
-## Technologies utilisées
+- Authentification sécurisée : Inscription et connexion avec JWT
+- Gestion des influenceurs : Création, lecture, mise à jour et suppression (CRUD)
+- Filtrage dynamique : Recherche par pays et catégorie
+- Interface utilisateur : Design moderne, responsive avec Material UI (inclut le mode sombre)
+ Technologies utilisées
 
 | Backend | Frontend | Outils |
 |---------|----------|---------|
 | Express.js | React + Vite | Docker |
 | Prisma ORM | Material UI | JWT Auth |
 | MongoDB | JavaScript | npm/yarn |
+ Démarrage rapide
 
-## Démarrage rapide
-
-```bash
-# 1. Cloner le projet
+bash 1. Cloner le projet
 git clone https://github.com/tonusername/influencehub.git
 cd influencehub
-
-# 2. Lancer MongoDB avec Docker
+ 2. Lancer MongoDB avec Docker
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
-
-# 3. Installer et lancer le backend
+ 3. Installer et lancer le backend
 cd backend
 npm install
 npx prisma generate
-npm run dev
-# Backend disponible sur http://localhost:5000
-
-# 4. Installer et lancer le frontend
+npm run dev Backend disponible sur http://localhost:5000
+ 4. Installer et lancer le frontend
 cd ../frontend
 npm install
-npm run dev
-# Frontend disponible sur http://localhost:5173
-```
+npm run dev Frontend disponible sur http://localhost:5173
 
-## Prérequis
+ Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé :
 
@@ -53,69 +41,62 @@ Avant de commencer, assurez-vous d'avoir installé :
 - [Docker](https://www.docker.com/) et Docker Compose
 - npm ou yarn
 - Un terminal (bash, zsh, PowerShell, etc.)
+ Architecture du projet
 
-## Architecture du projet
 
-```
 influencehub/
-├── backend/                    # Serveur Express
-│   ├── src/                   # Code source backend
-│   │   ├── config/            # Configuration (base de données, etc.)
-│   │   ├── controllers/       # Logique métier des endpoints
-│   │   ├── middlewares/       # Gestion des authentifications et erreurs
-│   │   ├── routes/            # Définition des routes API
-│   │   ├── services/          # Services pour la logique métier
-│   │   └── app.js             # Point d'entrée du serveur
-│   ├── prisma/                # Configuration Prisma
-│   │   └── schema.prisma      # Schéma de la base de données
-│   ├── .env                   # Variables d'environnement
-│   └── package.json           # Dépendances backend
-├── frontend/                   # Application React
-│   ├── public/                # Ressources statiques
-│   ├── src/                   # Code source frontend
-│   │   ├── assets/            # Images et autres ressources
-│   │   ├── components/        # Composants React réutilisables
-│   │   ├── contexts/          # Contextes pour la gestion d'état
-│   │   ├── hooks/             # Hooks personnalisés
-│   │   ├── pages/             # Pages de l'application
-│   │   ├── routes/            # Routes frontend
-│   │   ├── services/          # Appels API
-│   │   ├── theme.js           # Configuration Material UI
-│   │   ├── App.jsx            # Composant principal
-│   │   └── main.jsx           # Point d'entrée React
-│   └── package.json           # Dépendances frontend
+├── backend/                     Serveur Express
+│   ├── src/                    Code source backend
+│   │   ├── config/             Configuration (base de données, etc.)
+│   │   ├── controllers/        Logique métier des endpoints
+│   │   ├── middlewares/        Gestion des authentifications et erreurs
+│   │   ├── routes/             Définition des routes API
+│   │   ├── services/           Services pour la logique métier
+│   │   └── app.js              Point d'entrée du serveur
+│   ├── prisma/                 Configuration Prisma
+│   │   └── schema.prisma       Schéma de la base de données
+│   ├── .env                    Variables d'environnement
+│   └── package.json            Dépendances backend
+├── frontend/                    Application React
+│   ├── public/                 Ressources statiques
+│   ├── src/                    Code source frontend
+│   │   ├── assets/             Images et autres ressources
+│   │   ├── components/         Composants React réutilisables
+│   │   ├── contexts/           Contextes pour la gestion d'état
+│   │   ├── hooks/              Hooks personnalisés
+│   │   ├── pages/              Pages de l'application
+│   │   ├── routes/             Routes frontend
+│   │   ├── services/           Appels API
+│   │   ├── theme.js            Configuration Material UI
+│   │   ├── App.jsx             Composant principal
+│   │   └── main.jsx            Point d'entrée React
+│   └── package.json            Dépendances frontend
 └── README.md
-```
 
-## Configuration
-
-### Variables d'environnement
+ Configuration
+ Variables d'environnement
 
 Créer un fichier `.env` dans le dossier `backend/` avec le contenu suivant :
 
-```bash
+bash
 DATABASE_URL="mongodb://localhost:27017/influenceHub"
 PORT=5000
 JWT_SECRET="supersecret123"
-```
 
-> **Important** : Changez `JWT_SECRET` en production !
 
-### Vérification du démarrage
+> Important : Changez `JWT_SECRET` en production !
+ Vérification du démarrage
 
 Une fois les services démarrés, vous devriez pouvoir accéder à :
 
-- **Backend**: http://localhost:5000
-- **Frontend**: http://localhost:5173
-
-## API Endpoints
+- Backend: http://localhost:5000
+- Frontend: http://localhost:5173
+ API Endpoints
 
 Tous les endpoints sont accessibles via `http://localhost:5000`.
-
-### Authentification
-
-#### Inscription
-```bash
+ Authentification
+ Inscription
+bash
 curl -X POST http://localhost:5000/api/auth/inscription \
   -H "Content-Type: application/json" \
   -d '{
@@ -123,32 +104,27 @@ curl -X POST http://localhost:5000/api/auth/inscription \
     "motDePasse": "password123",
     "nom": "Test User"
   }'
-```
 
-#### Connexion
-```bash
+ Connexion
+bash
 curl -X POST http://localhost:5000/api/auth/connexion \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "motDePasse": "password123"
   }'
-```
 
-### Influenceurs
-
-#### Lister tous les influenceurs
-```bash
+ Influenceurs
+ Lister tous les influenceurs
+bash
 curl -X GET http://localhost:5000/api/influenceurs
-```
 
-#### Filtrer par pays et catégorie
-```bash
+ Filtrer par pays et catégorie
+bash
 curl -X GET "http://localhost:5000/api/influenceurs?categorie=Gaming&pays=Canada"
-```
 
-#### Créer un influenceur
-```bash
+ Créer un influenceur
+bash
 curl -X POST http://localhost:5000/api/influenceurs \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
@@ -159,57 +135,47 @@ curl -X POST http://localhost:5000/api/influenceurs \
     "pays": "Canada",
     "categorie": "Gaming"
   }'
-```
 
-#### Mettre à jour un influenceur
-```bash
+ Mettre à jour un influenceur
+bash
 curl -X PUT http://localhost:5000/api/influenceurs/ID \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
   -d '{"followers": 60000}'
-```
 
-#### Supprimer un influenceur
-```bash
+ Supprimer un influenceur
+bash
 curl -X DELETE http://localhost:5000/api/influenceurs/ID \
   -H "Authorization: Bearer TON_TOKEN_ICI"
-```
 
-## Fonctionnalités détaillées
-
-### Authentification
-- **Inscription** avec email, mot de passe et nom
-- **Connexion** avec génération de token JWT
-- **Gestion des sessions** et déconnexion
-
-### Gestion des influenceurs
-- **Création, lecture, mise à jour et suppression** (CRUD)
-- **Filtrage** par pays et catégorie
-- **Accès public ou sécurisé** par JWT selon les endpoints
-
-### Interface utilisateur
-- **Frontend React** avec Vite pour des performances optimales
-- **Design responsive** avec Material UI (inclut le mode sombre)
-- **Gestion des erreurs** et notifications utilisateur
-
-## Scripts disponibles
-
-### Backend
-```bash
+ Fonctionnalités détaillées
+ Authentification
+- Inscription avec email, mot de passe et nom
+- Connexion avec génération de token JWT
+- Gestion des sessions et déconnexion
+ Gestion des influenceurs
+- Création, lecture, mise à jour et suppression (CRUD)
+- Filtrage par pays et catégorie
+- Accès public ou sécurisé par JWT selon les endpoints
+ Interface utilisateur
+- Frontend React avec Vite pour des performances optimales
+- Design responsive avec Material UI (inclut le mode sombre)
+- Gestion des erreurs et notifications utilisateur
+ Scripts disponibles
+ Backend
+bash
 cd backend
-npm install          # Installer les dépendances
-npm run dev         # Démarrer en mode développement
-npx prisma generate # Générer le client Prisma
-```
+npm install           Installer les dépendances
+npm run dev          Démarrer en mode développement
+npx prisma generate  Générer le client Prisma
 
-### Frontend
-```bash
+ Frontend
+bash
 cd frontend
-npm install     # Installer les dépendances
-npm run dev     # Démarrer en mode développement
-```
+npm install      Installer les dépendances
+npm run dev      Démarrer en mode développement
 
-## Fonctionnalités MVP
+ Fonctionnalités MVP
 
 - Authentification sécurisée avec JWT
 - Gestion complète des influenceurs (CRUD)
@@ -217,61 +183,49 @@ npm run dev     # Démarrer en mode développement
 - Interface utilisateur moderne avec Material UI (mode sombre inclus)
 - Gestion des erreurs (tokens expirés, validation des champs)
 - Dockerisation de MongoDB pour un déploiement simplifié
+ Roadmap - Évolutions futures
 
-## Roadmap - Évolutions futures
-
-- **Tableau de bord** avec graphiques et statistiques
-- **Exportation des données** en CSV ou PDF
-- **Upload d'avatars** via Cloudinary
-- **Gestion des rôles** (administrateur, lecteur)
-- **Support de l'internationalisation** (i18n)
-
-## Maintenance et Dépannage
-
-### Nettoyage et réinitialisation
-
-#### Arrêter et supprimer MongoDB
-```bash
+- Tableau de bord avec graphiques et statistiques
+- Exportation des données en CSV ou PDF
+- Upload d'avatars via Cloudinary
+- Gestion des rôles (administrateur, lecteur)
+- Support de l'internationalisation (i18n)
+ Maintenance et Dépannage
+ Nettoyage et réinitialisation
+ Arrêter et supprimer MongoDB
+bash
 docker stop mongodb_influencehub
 docker rm mongodb_influencehub
-```
 
-#### Réinitialiser la base de données
-```bash
+ Réinitialiser la base de données
+bash
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
-```
 
-### Problèmes courants
+ Problèmes courants
 
 | Problème | Solution |
 |----------|----------|
-| **Les services ne démarrent pas** | `lsof -i :5000 -i :5173` puis tuer les processus |
-| **Erreur "Cannot find module"** | `rm -rf node_modules && npm install` |
-| **Base de données corrompue** | Supprimer et relancer le conteneur MongoDB |
-
-#### Réinstaller les dépendances
-```bash
-# Backend
+| Les services ne démarrent pas | `lsof -i :5000 -i :5173` puis tuer les processus |
+| Erreur "Cannot find module" | `rm -rf node_modules && npm install` |
+| Base de données corrompue | Supprimer et relancer le conteneur MongoDB |
+ Réinstaller les dépendances
+bash Backend
 cd backend && rm -rf node_modules && npm install
-
-# Frontend  
+ Frontend  
 cd ../frontend && rm -rf node_modules && npm install
-```
 
-## Structure des données
-
-### Utilisateur
-```json
+ Structure des données
+ Utilisateur
+json
 {
   "id": "64f5a1b2c3d4e5f6g7h8i9j0",
   "email": "user@example.com",
   "nom": "John Doe",
   "createdAt": "2024-01-01T00:00:00.000Z"
 }
-```
 
-### Influenceur
-```json
+ Influenceur
+json
 {
   "id": "64f5a1b2c3d4e5f6g7h8i9j1",
   "nom": "Influenceur Name",
@@ -281,32 +235,27 @@ cd ../frontend && rm -rf node_modules && npm install
   "categorie": "Mode",
   "createdAt": "2024-01-01T00:00:00.000Z"
 }
-```
 
-## Sécurité
+ Sécurité
 
-- **Mots de passe** : Hachage sécurisé avec bcrypt
-- **JWT** : Tokens avec expiration configurable
-- **Validation** : Validation des données d'entrée avec Prisma
-- **CORS** : Configuration CORS pour le développement
-
-## Contribution
+- Mots de passe : Hachage sécurisé avec bcrypt
+- JWT : Tokens avec expiration configurable
+- Validation : Validation des données d'entrée avec Prisma
+- CORS : Configuration CORS pour le développement
+ Contribution
 
 1. Fork le projet
 2. Créer une branche (`git checkout -b feature/amazing-feature`)
 3. Commit les changements (`git commit -m 'Add amazing feature'`)
 4. Push la branche (`git push origin feature/amazing-feature`)
 5. Ouvrir une Pull Request
-
-## Licence
+ Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+ Auteurs
 
-## Auteurs
-
-- **Ton Username** - *Développeur principal* - [@tonusername](https://github.com/tonusername)
-
-## Remerciements
+- Ton Username - *Développeur principal* - [@tonusername](https://github.com/tonusername)
+ Remerciements
 
 - [Material UI](https://mui.com/) pour les composants React
 - [Prisma](https://www.prisma.io/) pour l'ORM
@@ -315,11 +264,4 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ---
 
-<div align="center">
-
-**N'hésitez pas à étoiler ce projet si vous le trouvez utile !**
-
-*Développé pour la gestion d'influenceurs digitaux*
-
-</div>
-```
+<
