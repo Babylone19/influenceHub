@@ -1,129 +1,121 @@
 
-> Plateforme de gestion d’influenceurs — Backend Express + Prisma + MongoDB / Frontend React + Vite + Material UI
+---
 
+# InfluenceHub — Plateforme de gestion d’influenceurs
 
+**Backend :** Express + Prisma + MongoDB
+**Frontend :** React + Vite + Material UI
 
-  Aperçu
+---
 
-InfluenceHub est une application web full-stack permettant de :
+## Aperçu
 
--  S’authentifier (inscription / connexion / JWT)
--  Créer, Lire, Mettre à jour, Supprimer des profils d’influenceurs
--  Filtrer par pays, catégorie
--  Interface moderne, responsive, et intuitive
+**InfluenceHub** est une application web full-stack permettant de :
 
+* Authentification (inscription / connexion avec JWT)
+* CRUD complet des profils d’influenceurs
+* Filtres dynamiques par pays et catégorie
+* Interface moderne, responsive et intuitive
 
+---
 
-  Stack Technique
+## Stack Technique
 
-| Partie | Technologies |
-|--|--|
-| Backend | Node.js, Express.js, Prisma ORM, MongoDB, JWT |
-| Frontend | React (Vite), Material UI v5, React Router, Axios, Notistack |
-| Infrastructure | Docker (MongoDB), .env, NPM/Yarn |
-| Déploiement | Local (pour le MVP) |
+| Partie             | Technologies                                                 |
+| ------------------ | ------------------------------------------------------------ |
+| **Backend**        | Node.js, Express.js, Prisma ORM, MongoDB, JWT                |
+| **Frontend**       | React (Vite), Material UI v5, React Router, Axios, Notistack |
+| **Infrastructure** | Docker (MongoDB), .env, NPM/Yarn                             |
+| **Déploiement**    | Local (MVP)                                                  |
 
+---
 
+## Prérequis
 
-  Prérequis
+* Node.js v18+
+* Docker & Docker Compose
+* npm ou yarn
+* Un terminal (bash, zsh, PowerShell, etc.)
 
--  Node.js v18+
--  Docker & Docker Compose
--  npm ou yarn
--  Un terminal (bash, zsh, PowerShell, etc.)
+---
 
+## Installation & Lancement
 
+### 1. Cloner le dépôt
 
-  Installation & Lancement
-
-
-
- 1. Cloner le dépôt
-
-bash
+```bash
 git clone https://github.com/tonusername/influencehub.git
 cd influencehub
+```
 
+### 2. Lancer la base de données MongoDB avec Docker
 
+À la racine du projet :
 
-
- 2. Lancer la base de données MongoDB avec Docker
-
->  À la racine du projet
-
-bash
+```bash
 docker run --name mongodb_influencehub -p 27017:27017 -d mongo:latest
+```
 
+MongoDB sera accessible sur :
 
- MongoDB sera accessible sur `mongodb://localhost:27017`
+```
+mongodb://localhost:27017
+```
 
+### 3. Configurer le Backend
 
-
- 3. Configurer le Backend
-
->  `backend/`
-
- a. Installer les dépendances
-
-bash
+```bash
 cd backend
 npm install
+```
 
+Créer un fichier `.env` à la racine de `backend/` :
 
- b. Créer un fichier `.env` à la racine de `backend/`
-
-env
+```env
 DATABASE_URL="mongodb://localhost:27017/influenceHub"
 PORT=5000
-JWT_SECRET="votre_secret_jwt_ici"  Ex: "supersecret123"
+JWT_SECRET="supersecret123"
+```
 
+Générer le client Prisma :
 
- c. Générer le client Prisma
-
-bash
+```bash
 npx prisma generate
+```
 
+Lancer le serveur backend :
 
- d. Lancer le serveur backend
-
-bash
+```bash
 npm run dev
+```
 
+Serveur disponible sur :
 
-→ Serveur disponible sur `http://localhost:5000`
+```
+http://localhost:5000
+```
 
+### 4. Lancer le Frontend
 
-
- 4. Lancer le Frontend
-
->  `frontend/`
-
- a. Installer les dépendances
-
-bash
+```bash
 cd ../frontend
 npm install
-
-
- b. Lancer le serveur de développement
-
-bash
 npm run dev
+```
 
+Frontend disponible sur :
 
-→ Frontend disponible sur `http://localhost:5173`
+```
+http://localhost:5173
+```
 
+---
 
+## Tests API (cURL)
 
-  Tester le Backend avec cURL
+### 1. Inscription
 
-> Toutes les commandes ci-dessous peuvent être exécutées dans ton terminal.
-
-
-
-  1. Inscription
-
-bash
+```bash
 curl -X POST http://localhost:5000/api/auth/inscription \
   -H "Content-Type: application/json" \
   -d '{
@@ -131,52 +123,34 @@ curl -X POST http://localhost:5000/api/auth/inscription \
     "motDePasse": "password123",
     "nom": "Test User"
   }'
+```
 
+### 2. Connexion (obtenir un token JWT)
 
-→ Réponse attendue : `Utilisateur créé avec succès` + données utilisateur.
-
-
-
-  2. Connexion (obtenir le token JWT)
-
-bash
+```bash
 curl -X POST http://localhost:5000/api/auth/connexion \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "motDePasse": "password123"
   }'
+```
 
+### 3. Lister les influenceurs (public)
 
-→ Réponse attendue : `{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx" }`
-
- Copie ce token, tu en auras besoin pour les requêtes suivantes.
-
-
-
-  3. Lister tous les influenceurs (public)
-
-bash
+```bash
 curl -X GET http://localhost:5000/api/influenceurs
+```
 
+### 4. Filtrer les influenceurs
 
-→ Réponse : tableau JSON d’influenceurs.
-
-
-
-  4. Filtrer les influenceurs
-
-bash
+```bash
 curl -X GET "http://localhost:5000/api/influenceurs?categorie=Humour&pays=Italie"
+```
 
+### 5. Créer un influenceur (protégé — nécessite un token)
 
-→ Réponse : influenceurs correspondant aux critères.
-
-
-
-  5. Créer un influenceur (protégé — nécessite un token)
-
-bash
+```bash
 curl -X POST http://localhost:5000/api/influenceurs \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
@@ -187,66 +161,56 @@ curl -X POST http://localhost:5000/api/influenceurs \
     "pays": "Canada",
     "categorie": "Gaming"
   }'
+```
 
+### 6. Mettre à jour un influenceur
 
-→ Réponse : objet influenceur créé.
-
-
-
-  6. Mettre à jour un influenceur
-
-bash
+```bash
 curl -X PUT http://localhost:5000/api/influenceurs/ID_DE_L_INFLUENCEUR \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TON_TOKEN_ICI" \
   -d '{"followers": 60000}'
+```
 
+### 7. Supprimer un influenceur
 
-→ Remplace `ID_DE_L_INFLUENCEUR` par un vrai ID (ex: `68d1d02fdb2dcad20a0c98ac`).
-
-
-
-  7. Supprimer un influenceur
-
-bash
+```bash
 curl -X DELETE http://localhost:5000/api/influenceurs/ID_DE_L_INFLUENCEUR \
   -H "Authorization: Bearer TON_TOKEN_ICI"
+```
 
+---
 
-→ Réponse : `{"message":"Influenceur supprimé avec succès"}`
+## Tests Frontend
 
+1. Ouvrir le navigateur : [http://localhost:5173](http://localhost:5173)
+2. S’inscrire via **Commencer gratuitement**
+3. Se connecter
+4. Explorer la liste des influenceurs
+5. Créer, modifier ou supprimer un influenceur
 
+---
 
-  Tester le Frontend
+## Nettoyage & Réinitialisation
 
-1. Ouvre ton navigateur → `http://localhost:5173`
-2. Clique sur “Commencer gratuitement” → inscris-toi.
-3. Connecte-toi.
-4. Explore la liste des influenceurs.
-5. Crée, modifie, ou supprime un influenceur via l’interface.
+### Supprimer le conteneur MongoDB
 
-
-
-  Nettoyage & Réinitialisation
-
- Supprimer le conteneur MongoDB
-
-bash
+```bash
 docker stop mongodb_influencehub
 docker rm mongodb_influencehub
+```
 
+### Réinitialiser la base
 
- Réinitialiser la base de données
+1. Supprimer le conteneur ci-dessus
+2. Relancer MongoDB → une base vide sera créée
+3. (Optionnel) Utiliser `mongosh` pour gérer les documents
 
-1. Supprime le conteneur (voir ci-dessus).
-2. Relance-le → une base vide sera créée.
-3. (Optionnel) Utilise `mongosh` pour supprimer des documents spécifiques.
+---
 
+## Structure du Projet
 
-
-  Structure du Projet
-
-
+```
 influencehub/
 ├── backend/
 │   ├── src/
@@ -275,30 +239,28 @@ influencehub/
 │   │   └── main.jsx
 │   └── package.json
 └── README.md
+```
 
+---
 
+## Fonctionnalités MVP
 
+* Authentification JWT (inscription, connexion, déconnexion)
+* CRUD complet des influenceurs
+* Filtres dynamiques (pays, catégorie)
+* UI moderne et responsive (Material UI, mode sombre)
+* Gestion des erreurs (tokens expirés, champs manquants)
+* Dockerisé (MongoDB)
 
-  Fonctionnalités MVP
+---
 
--  Authentification JWT (inscription, connexion, déconnexion)
--  CRUD complet des influenceurs
--  Filtres dynamiques (pays, catégorie)
--  UI moderne et responsive (Material UI, mode sombre)
--  Gestion des erreurs (tokens expirés, champs manquants)
--  Dockerisé (MongoDB)
+## Évolutions Futures
 
+* Tableau de bord analytics (graphiques, stats)
+* Export CSV/PDF
+* Upload d’avatar (Cloudinary)
+* Gestion des rôles (admin / lecteur)
+* Internationalisation (i18n)
 
-
-  Évolutions Futures
-
--  Tableau de bord analytics (graphiques, stats)
--  Export CSV/PDF
--  Upload d’avatar (Cloudinary)
--  Gestion des rôles (admin / lecteur)
--  Internationalisation (i18n)
-
-
-
-
+---
 
